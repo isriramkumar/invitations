@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saravanan & Valli — Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8CB7A;
+  --gold-pale: #F5E9C8;
+  --gold-dim: #8B6914;
+  --cream: #F5EDD8;
+  --cream-dim: rgba(245,237,216,0.6);
+  --ink: #1A0F00;
+  --deep: #0C0700;
+  --dark: #120900;
+  --mid: #1E1000;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--deep);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CURSOR ─────────────────────────────────── */
+.cursor {
+  position: fixed; z-index: 9999;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: difference;
+  transition: width .15s, height .15s;
+}
+.cursor-ring {
+  position: fixed; z-index: 9998;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.5);
+  pointer-events: none;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s;
+}
+.cursor.big { width: 18px; height: 18px; }
+.cursor-ring.big { width: 56px; height: 56px; }
+
+/* ─── SCROLL PROGRESS ────────────────────────── */
+.progress {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 1.5px; background: var(--gold);
+  transform-origin: left; transform: scaleX(0);
+  z-index: 1000; transition: transform .08s linear;
+}
+
+/* ─── NOISE GRAIN ────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9990;
+  pointer-events: none; opacity: .03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ─── REVEAL SYSTEM ──────────────────────────── */
+.r   { opacity: 0; transform: translateY(50px);  transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1); }
+.rl  { opacity: 0; transform: translateX(-60px); transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1); }
+.rr  { opacity: 0; transform: translateX(60px);  transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1); }
+.rs  { opacity: 0; transform: scale(.94);         transition: opacity .95s cubic-bezier(.16,1,.3,1), transform .95s cubic-bezier(.16,1,.3,1); }
+.on  { opacity: 1 !important; transform: none !important; }
+
+/* ─── ══ SECTION 1: HERO ══ ──────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 80px 40px;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 100% 80% at 50% 30%, #321500 0%, #180A00 45%, var(--deep) 100%);
+}
+
+.hero-floral {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 900px; height: 900px;
+  transform: translate(-50%, -50%);
+  opacity: .12;
+  background: url('https://framerusercontent.com/images/ZJuwYsHXk0HnRjJnd4JPA93gI60.png?width=900') center/contain no-repeat;
+  animation: slowspin 90s linear infinite;
+  pointer-events: none;
+}
+@keyframes slowspin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+.hero-particles { position: absolute; inset: 0; pointer-events: none; }
+.pt {
+  position: absolute;
+  width: 2px; height: 2px; border-radius: 50%;
+  background: var(--gold-light); opacity: 0;
+  animation: ptf var(--d) ease-in-out infinite var(--dl);
+}
+@keyframes ptf {
+  0%   { opacity: 0; transform: translateY(0) scale(0); }
+  20%  { opacity: .9; }
+  80%  { opacity: .3; }
+  100% { opacity: 0; transform: translateY(-100px) scale(2); }
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: .7rem; letter-spacing: .45em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  animation: fadein .8s .2s both;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300; font-style: italic;
+  font-size: clamp(4.5rem, 12vw, 10rem);
+  line-height: .92;
+  color: var(--cream);
+  text-shadow: 0 0 120px rgba(201,168,76,.2);
+  animation: fadein .9s .4s both;
+}
+
+.hero-title .amp {
+  display: block;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-style: normal; font-weight: 300;
+  letter-spacing: .6em; color: var(--gold);
+  margin: .7rem 0;
+}
+
+.hero-meta {
+  margin-top: 3rem;
+  animation: fadein .9s .7s both;
+}
+.hero-meta-date {
+  font-family: 'Cinzel', serif;
+  font-size: .8rem; letter-spacing: .25em;
+  color: var(--gold-light); margin-bottom: .5rem;
+}
+.hero-meta-location {
+  font-size: .95rem; color: var(--cream-dim);
+  font-style: italic; letter-spacing: .05em;
+}
+
+.hero-scroll {
+  margin-top: 4rem;
+  animation: fadein .9s 1s both;
+  display: flex; flex-direction: column; align-items: center; gap: .8rem;
+}
+.hero-scroll-line {
+  width: 1px; height: 70px;
+  background: linear-gradient(to bottom, transparent, var(--gold) 60%, transparent);
+  animation: scrollpulse 2s ease-in-out infinite;
+}
+@keyframes scrollpulse {
+  0%,100% { opacity: .3; transform: scaleY(.8); }
+  50%      { opacity: 1;  transform: scaleY(1); }
+}
+.hero-scroll-label {
+  font-family: 'Cinzel', serif;
+  font-size: .6rem; letter-spacing: .4em;
+  color: rgba(201,168,76,.4); text-transform: uppercase;
+}
+
+@keyframes fadein { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+
+/* ─── MARQUEE ────────────────────────────────── */
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid rgba(201,168,76,.12);
+  border-bottom: 1px solid rgba(201,168,76,.12);
+  padding: 1.6rem 0;
+  background: rgba(201,168,76,.02);
+}
+.marquee-track {
+  display: flex; gap: 3rem;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+.marquee-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  color: rgba(201,168,76,.35);
+  flex-shrink: 0;
+}
+.marquee-sep { color: rgba(201,168,76,.5); }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ─── ══ SECTION 2: SAVE THE DATE ══ ─────────── */
+.savedate {
+  position: relative;
+  padding: 140px 40px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--deep) 0%, #1C0C00 50%, var(--deep) 100%);
+}
+
+.savedate-bg-circle {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 800px; height: 800px;
+  border-radius: 50%;
+  background: url('https://framerusercontent.com/images/BgpcqMk4l313b21gEqjiSnECZPw.png?width=800') center/contain no-repeat;
+  transform: translate(-50%,-50%);
+  opacity: .08;
+  pointer-events: none;
+}
+
+.savedate-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 3rem; align-items: start;
+  position: relative; z-index: 1;
+}
+
+.savedate-label {
+  font-family: 'Cinzel', serif;
+  font-size: .65rem; letter-spacing: .4em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 1.2rem; opacity: .8;
+}
+
+.savedate-event-name {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-style: italic; font-weight: 300;
+  color: var(--cream); line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.savedate-details {
+  line-height: 2.2;
+  color: var(--cream-dim);
+  font-size: .95rem;
+}
+.savedate-details strong {
+  color: var(--cream); font-weight: 400; display: block;
+}
+
+.savedate-divider-v {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,.25), transparent);
+  align-self: stretch;
+  margin: 0 auto;
+}
+
+.savedate-invite {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 4rem;
+  border-top: 1px solid rgba(201,168,76,.1);
+}
+.savedate-invite p {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-style: italic; font-weight: 300;
+  color: var(--cream-dim);
+  line-height: 1.7;
+  max-width: 700px; margin: 0 auto;
+}
+.savedate-invite em {
+  color: var(--cream); font-style: italic;
+}
+
+/* ─── ══ SECTION 3: INTRODUCING ══ ───────────── */
+.intro {
+  padding: 140px 40px;
+  background: var(--deep);
+  position: relative; overflow: hidden;
+}
+
+.intro-bg-portrait {
+  position: absolute;
+  top: 0; left: 50%;
+  width: 700px; height: 100%;
+  transform: translateX(-50%);
+  background: url('https://framerusercontent.com/images/rrwKTrpY1PPK3b0tIOxVbSF7GQ.png?width=700') center/cover no-repeat;
+  opacity: .06;
+  pointer-events: none;
+}
+
+.intro-inner {
+  max-width: 1100px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+
+.intro-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: .65rem; letter-spacing: .45em;
+  color: var(--gold); text-transform: uppercase;
+  text-align: center; margin-bottom: 1rem;
+}
+
+.intro-headline {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 300; font-style: italic;
+  line-height: 1.05; text-align: center;
+  color: var(--cream); margin-bottom: 5rem;
+}
+
+.couple-grid {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center; gap: 2rem;
+}
+
+.person { text-align: center; }
+
+.person-frame {
+  position: relative;
+  width: 200px; height: 280px;
+  margin: 0 auto 2rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(201,168,76,.18);
+  box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 40px rgba(201,168,76,.06);
+  transition: transform .5s ease, box-shadow .5s ease;
+  transform-style: preserve-3d;
+}
+.person-frame:hover {
+  box-shadow: 0 50px 100px rgba(0,0,0,.8), 0 0 60px rgba(201,168,76,.12);
+}
+.person-frame::before {
+  content: ''; position: absolute; inset: 7px;
+  border: 1px solid rgba(201,168,76,.12); z-index: 1;
+  border-radius: 4px; pointer-events: none;
+}
+.person-img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: sepia(.25) brightness(.75);
+  transition: transform .6s ease;
+}
+.person-frame:hover .person-img { transform: scale(1.06); }
+.person-img-placeholder {
+  width: 100%; height: 100%;
+  background: linear-gradient(145deg, #241200, #0D0600);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 4rem; color: rgba(201,168,76,.12);
+}
+
+.person-name {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-style: italic; font-weight: 300;
+  color: var(--cream); margin-bottom: .4rem;
+}
+.person-role {
+  font-family: 'Cinzel', serif;
+  font-size: .65rem; letter-spacing: .3em;
+  color: var(--gold-dim); text-transform: uppercase;
+}
+.person-parents {
+  font-size: .85rem; color: rgba(245,237,216,.4);
+  font-style: italic; line-height: 1.8;
+  margin-top: .8rem;
+}
+
+.weds-col {
+  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: center; gap: .6rem;
+}
+.weds-text {
+  font-family: 'Cinzel', serif;
+  font-size: .8rem; letter-spacing: .3em;
+  color: var(--gold); text-transform: uppercase;
+  writing-mode: vertical-lr; transform: rotate(180deg);
+}
+.weds-ornament { font-size: 1.5rem; color: rgba(201,168,76,.3); }
+
+.blessing {
+  text-align: center;
+  margin-top: 5rem;
+  padding-top: 4rem;
+  border-top: 1px solid rgba(201,168,76,.1);
+}
+.blessing p {
+  font-size: 1.1rem; font-style: italic;
+  color: var(--cream-dim); line-height: 2;
+}
+
+/* ─── ══ SECTION 4: WHERE OUR STORY BEGINS ══ ── */
+.story {
+  padding: 160px 0 80px;
+  background: linear-gradient(180deg, var(--deep) 0%, #100800 60%, var(--deep) 100%);
+  position: relative; overflow: hidden;
+}
+
+.story-letters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 5rem;
+}
+.story-word {
+  display: flex;
+  justify-content: center;
+  gap: clamp(.2rem, 1vw, .8rem);
+  line-height: 1;
+}
+.story-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  color: rgba(245,237,216,.06);
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .6s ease, transform .6s ease, color .4s ease;
+}
+.story-letter:hover { color: rgba(201,168,76,.5) !important; }
+.story-letter.lit { color: rgba(245,237,216,.14); }
+.story-letter.on  { opacity: 1; transform: none; }
+
+.story-sep {
+  width: 60px; height: 1px;
+  background: rgba(201,168,76,.12);
+  margin: .4rem auto;
+}
+
+/* ─── PHOTO MOSAIC ────────────────────────────── */
+.mosaic {
+  padding: 0 40px;
+  max-width: 1200px; margin: 0 auto;
+}
+.mosaic-row {
+  display: flex; gap: 10px;
+  margin-bottom: 10px;
+  height: 280px;
+}
+.mosaic-row:nth-child(even) { height: 240px; }
+.mosaic-item {
+  flex: 1; border-radius: 4px;
+  overflow: hidden; position: relative;
+  background: #1A0900;
+  transition: flex .5s cubic-bezier(.16,1,.3,1);
+  transform-style: preserve-3d;
+}
+.mosaic-item:hover { flex: 1.6; }
+.mosaic-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: sepia(.2) brightness(.8) saturate(.9);
+  transition: transform .6s ease, filter .4s ease;
+  display: block;
+}
+.mosaic-item:hover img {
+  transform: scale(1.05);
+  filter: sepia(.05) brightness(.9) saturate(1.1);
+}
+.mosaic-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(5,2,0,.6) 0%, transparent 60%);
+  opacity: 0; transition: opacity .3s;
+}
+.mosaic-item:hover .mosaic-overlay { opacity: 1; }
+
+/* ─── ══ FINAL NAMES ══ ───────────────────────── */
+.final {
+  padding: 160px 40px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, var(--deep) 0%, #201000 50%, var(--deep) 100%);
+}
+
+.final-bg {
+  position: absolute; top: 50%; left: 50%;
+  width: 700px; height: 700px;
+  background: url('https://framerusercontent.com/images/eVrdpbq3f7kw3BHZKOev9v0BQ.png?width=700') center/contain no-repeat;
+  transform: translate(-50%,-50%);
+  opacity: .07; pointer-events: none;
+  animation: slowspin 120s linear infinite;
+}
+
+.final-names {
+  font-size: clamp(4rem, 11vw, 9.5rem);
+  font-weight: 300; font-style: italic;
+  line-height: .95; color: var(--cream);
+  text-shadow: 0 0 100px rgba(201,168,76,.18);
+  position: relative; z-index: 1;
+}
+.final-weds {
+  display: block;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-style: normal; font-weight: 300;
+  letter-spacing: .5em; color: var(--gold);
+  margin: .8rem 0;
+}
+
+.final-parents {
+  display: grid; grid-template-columns: 1fr 60px 1fr;
+  gap: 2rem; align-items: center;
+  max-width: 700px; margin: 4rem auto 0;
+  position: relative; z-index: 1;
+}
+.final-parent-block { text-align: center; }
+.final-parent-block .label {
+  font-family: 'Cinzel', serif;
+  font-size: .6rem; letter-spacing: .35em;
+  color: var(--gold-dim); text-transform: uppercase;
+  margin-bottom: .6rem;
+}
+.final-parent-block .name {
+  font-size: 1rem; font-style: italic;
+  color: var(--cream-dim); line-height: 1.8;
+}
+.final-v-line {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,.25), transparent);
+  margin: auto;
+}
+
+/* ─── FOOTER ─────────────────────────────────── */
+footer {
+  padding: 60px 40px;
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,.1);
+  background: var(--deep);
+}
+.footer-copy {
+  font-family: 'Cinzel', serif;
+  font-size: .65rem; letter-spacing: .3em;
+  color: rgba(201,168,76,.2); text-transform: uppercase;
+}
+
+/* ─── SHARED ORNAMENTS ───────────────────────── */
+.ornament {
+  display: block; text-align: center;
+  color: var(--gold); font-size: 1rem;
+  letter-spacing: .3em; margin: 1.5rem 0;
+  opacity: .5;
+}
+.gold-line {
+  width: 80px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 1.5rem auto;
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { opacity: .3; width: 60px; }
+  50%      { opacity: 1;  width: 110px; }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 768px) {
+  .savedate-inner { grid-template-columns: 1fr; }
+  .savedate-divider-v { display: none; }
+  .couple-grid { grid-template-columns: 1fr; }
+  .weds-col .weds-text { writing-mode: horizontal-tb; transform: none; }
+  .mosaic-row { height: 160px; }
+  .final-parents { grid-template-columns: 1fr; gap: .5rem; }
+  .final-v-line { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="C"></div>
+<div class="cursor-ring" id="CR"></div>
+<div class="progress" id="PB"></div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-floral"></div>
+  <div class="hero-particles" id="pts"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">✦ &nbsp; Save the Date &nbsp; ✦</div>
+    <h1 class="hero-title">
+      Saravanan
+      <span class="amp">weds</span>
+      Valli
+    </h1>
+    <div class="hero-meta">
+      <div class="hero-meta-date">Thursday, 14th October 2026 &nbsp;·&nbsp; 09:30 AM</div>
+      <div class="hero-meta-location">Padmavathi Parinayan · Vijayawada</div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span class="hero-scroll-label">Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ MARQUEE ═══════════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Saravanan &amp; Valli</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">14th October 2026</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">Vijayawada</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">With Love &amp; Blessings</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">Saravana Nakshatram</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">Saravanan &amp; Valli</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">14th October 2026</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">Vijayawada</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">With Love &amp; Blessings</span>
+    <span class="marquee-sep">✦</span>
+    <span class="marquee-item">Saravana Nakshatram</span>
+    <span class="marquee-sep">✦</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ SAVE THE DATE ════════ -->
+<section class="savedate">
+  <div class="savedate-bg-circle"></div>
+  <div class="savedate-inner">
+
+    <div class="r">
+      <div class="savedate-label">Save the Date</div>
+      <div class="savedate-event-name">Subamuhurtham</div>
+      <div class="savedate-details">
+        <strong>Thursday, 14th October 2026</strong>
+        At 09:30 AM<br>
+        Saravana Nakshatram<br>
+        Palani
+      </div>
+    </div>
+
+    <div class="savedate-divider-v r" style="transition-delay:.15s"></div>
+
+    <div class="r" style="transition-delay:.1s">
+      <div class="savedate-label">Reception</div>
+      <div class="savedate-event-name">Reception Evening</div>
+      <div class="savedate-details">
+        <strong>Friday, 15th October 2026</strong>
+        At 07:30 PM<br>
+        Saravana Nakshatram<br>
+        Palani
+      </div>
+    </div>
+
+    <div class="savedate-invite r" style="transition-delay:.2s">
+      <span class="ornament">✦ ✦ ✦</span>
+      <p>We Request your gracious presence on the Auspicious<br>
+      <em>occasion of our marriage</em></p>
+      <div class="gold-line" style="margin-top:2rem"></div>
+      <div style="margin-top:1.5rem; font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.3em; color:var(--gold-dim); text-transform:uppercase;">
+        Padmavathi Parinayan · Near Priya Pickles, Poranki · Vijayawada
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════ INTRODUCING ══════════ -->
+<section class="intro">
+  <div class="intro-bg-portrait"></div>
+  <div class="intro-inner">
+    <div class="intro-eyebrow r">Introducing the</div>
+    <h2 class="intro-headline r" style="transition-delay:.1s">Groom and Bride</h2>
+
+    <div class="couple-grid">
+      <div class="person rl" style="transition-delay:.15s">
+        <div class="person-frame">
+          <img src="https://framerusercontent.com/images/uY3DzIyHeMBI0qgEt1a3OhAmkqw.jpg?width=400" alt="Saravanan" class="person-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="person-img-placeholder" style="display:none">🌺</div>
+        </div>
+        <div class="person-name">Saravanan</div>
+        <div class="person-role">The Groom</div>
+        <div class="person-parents">Son of<br><em>Smt. Janani &amp; Shri. Vijay</em></div>
+      </div>
+
+      <div class="weds-col r" style="transition-delay:.2s">
+        <div class="weds-ornament">✦</div>
+        <div class="weds-text">weds</div>
+        <div class="weds-ornament">✦</div>
+      </div>
+
+      <div class="person rr" style="transition-delay:.15s">
+        <div class="person-frame">
+          <img src="https://framerusercontent.com/images/vW7TzQKDGECKvSTfLWxktyWBGcA.jpg?width=400" alt="Valli" class="person-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="person-img-placeholder" style="display:none">🌸</div>
+        </div>
+        <div class="person-name">Valli</div>
+        <div class="person-role">The Bride</div>
+        <div class="person-parents">Daughter of<br><em>Smt. Shalini &amp; Shri. Ajith Kumar</em></div>
+      </div>
+    </div>
+
+    <div class="blessing r" style="transition-delay:.3s">
+      <p>With the divine blessings of<br>
+      <em style="color:var(--cream)">Smt. Parvathi Amma &amp; Shri Sivan</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHERE OUR STORY BEGINS ═ -->
+<section class="story">
+  <div class="story-letters" id="storyLetters">
+    <div class="story-word"><span class="story-letter">W</span><span class="story-letter">H</span><span class="story-letter">E</span><span class="story-letter">R</span><span class="story-letter">E</span></div>
+    <div class="story-sep"></div>
+    <div class="story-word"><span class="story-letter">O</span><span class="story-letter">U</span><span class="story-letter">R</span></div>
+    <div class="story-sep"></div>
+    <div class="story-word"><span class="story-letter">S</span><span class="story-letter">T</span><span class="story-letter">O</span><span class="story-letter">R</span><span class="story-letter">Y</span></div>
+    <div class="story-sep"></div>
+    <div class="story-word"><span class="story-letter">B</span><span class="story-letter">E</span><span class="story-letter">G</span><span class="story-letter">I</span><span class="story-letter">N</span><span class="story-letter">S</span></div>
+  </div>
+
+  <div class="mosaic">
+    <div class="mosaic-row rs">
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/ScmcmQYBWSK01i1zUpGkfuog.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/WGGQn50FvNh0FWeksRGwGc8HBD8.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/hKIXRnBHXi3BqsH7hPMLBWPsrg.jpg?width=400" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+    </div>
+    <div class="mosaic-row rs" style="transition-delay:.1s">
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/6f5ryzjmmK15bl66yOGnKuUm9kU.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/ckxQ3CnXt7t4fXmpYCa5suITG0k.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/EWg5KuAkS7yoylL3Tgm3c95IqG0.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/rwVokqRt0PQA9WuJRTOYtaREBs.jpg?width=400" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+    </div>
+    <div class="mosaic-row rs" style="transition-delay:.2s">
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/6A0UbuAYozvJAd8k5ue9gVKaTjQ.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/yjZHYkESRWmw3kYxdflL14g6zU.jpg?width=400" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+      <div class="mosaic-item"><img src="https://framerusercontent.com/images/gQ2EefMmKTZenibE6p2qjF1ug.jpg?width=600" alt="" loading="lazy"><div class="mosaic-overlay"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FINAL NAMES ══════════ -->
+<section class="final">
+  <div class="final-bg"></div>
+  <div class="r" style="position:relative;z-index:1">
+    <span style="font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.45em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:3rem; opacity:.7">✦ &nbsp; The Union &nbsp; ✦</span>
+    <div class="final-names">
+      Saravanan
+      <span class="final-weds">weds</span>
+      Valli
+    </div>
+    <div class="gold-line"></div>
+  </div>
+
+  <div class="final-parents r" style="transition-delay:.2s">
+    <div class="final-parent-block">
+      <div class="label">Saravanan</div>
+      <div class="name">Son of<br><em>Smt. Janani &amp; Shri. Vijay</em></div>
+    </div>
+    <div class="final-v-line"></div>
+    <div class="final-parent-block">
+      <div class="label">Valli</div>
+      <div class="name">Daughter of<br><em>Smt. Shalini &amp; Shri. Ajith Kumar</em></div>
+    </div>
+  </div>
+
+  <div class="r" style="margin-top:5rem; transition-delay:.3s; position:relative;z-index:1">
+    <div style="font-family:'Cinzel',serif; font-size:.65rem; letter-spacing:.3em; color:var(--gold-dim); text-transform:uppercase;">
+      Padmavathi Parinayan · Near Priya Pickles, Poranki · Vijayawada
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ════════════════ -->
+<footer>
+  <div class="footer-copy">© 2026 Deepak Kumar · All Rights Reserved</div>
+</footer>
+
+<script>
+// ── Cursor ───────────────────────────────────────
+const C = document.getElementById('C'), CR = document.getElementById('CR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; C.style.left=mx+'px'; C.style.top=my+'px'; });
+(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; CR.style.left=rx+'px'; CR.style.top=ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('.person-frame,.mosaic-item,a').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ C.classList.add('big'); CR.classList.add('big'); });
+  el.addEventListener('mouseleave',()=>{ C.classList.remove('big'); CR.classList.remove('big'); });
+});
+
+// ── Progress bar ─────────────────────────────────
+const PB=document.getElementById('PB');
+window.addEventListener('scroll',()=>{
+  PB.style.transform=`scaleX(${window.scrollY/(document.body.scrollHeight-window.innerHeight)})`;
+});
+
+// ── IntersectionObserver reveals ─────────────────
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); });
+},{ threshold:.1 });
+document.querySelectorAll('.r,.rl,.rr,.rs').forEach(el=>io.observe(el));
+
+// ── Story letters staggered reveal ───────────────
+const storyObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting) return;
+    document.querySelectorAll('.story-letter').forEach((l,i)=>{
+      setTimeout(()=>l.classList.add('on'), i*55);
+    });
+    storyObs.disconnect();
+  });
+},{ threshold:.15 });
+const sl=document.getElementById('storyLetters');
+if(sl) storyObs.observe(sl);
+
+// ── Story letter lit-up on scroll depth ──────────
+const allLetters=document.querySelectorAll('.story-letter');
+window.addEventListener('scroll',()=>{
+  allLetters.forEach(l=>{
+    const rect=l.getBoundingClientRect();
+    const pct=1-(rect.top/window.innerHeight);
+    if(pct>.35) l.classList.add('lit'); else l.classList.remove('lit');
+  });
+});
+
+// ── Hero parallax ────────────────────────────────
+const heroContent=document.querySelector('.hero-content');
+const heroFloral=document.querySelector('.hero-floral');
+window.addEventListener('scroll',()=>{
+  const sy=window.scrollY,vh=window.innerHeight;
+  if(sy<vh){
+    if(heroContent){ heroContent.style.transform=`translateY(${sy*.28}px)`; heroContent.style.opacity=1-sy/(vh*.65); }
+    if(heroFloral)  heroFloral.style.transform=`translate(-50%,calc(-50% + ${sy*.12}px))`;
+  }
+});
+
+// ── Floating particles ───────────────────────────
+const pts=document.getElementById('pts');
+for(let i=0;i<50;i++){
+  const p=document.createElement('div'); p.className='pt';
+  p.style.cssText=`left:${Math.random()*100}%;top:${30+Math.random()*55}%;--d:${3+Math.random()*5}s;--dl:${-Math.random()*7}s;`;
+  pts.appendChild(p);
+}
+
+// ── 3D tilt on person frames ──────────────────────
+document.querySelectorAll('.person-frame').forEach(f=>{
+  f.addEventListener('mousemove',e=>{
+    const r=f.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-.5)*16;
+    const y=((e.clientY-r.top)/r.height-.5)*-16;
+    f.style.transform=`translateY(-10px) scale(1.02) rotateX(${y}deg) rotateY(${x}deg)`;
+  });
+  f.addEventListener('mouseleave',()=>f.style.transform='');
+});
+
+// ── Mosaic 3D tilt ────────────────────────────────
+document.querySelectorAll('.mosaic-item').forEach(item=>{
+  item.addEventListener('mousemove',e=>{
+    const r=item.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-.5)*6;
+    const y=((e.clientY-r.top)/r.height-.5)*-6;
+    item.style.transform=`scale(1.01) rotateX(${y}deg) rotateY(${x}deg)`;
+  });
+  item.addEventListener('mouseleave',()=>item.style.transform='');
+});
+</script>
+</body>
+</html>
